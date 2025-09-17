@@ -215,3 +215,7 @@ fs_bcl_mei_mukti_wardana/
 - **Buat Pesanan**: Menu Pemesanan → Buat Pesanan Baru
 - **Pilih Jenis Kendaraan**: Sistem akan otomatis assign armada yang tersedia
 - **Monitor Status**: Lihat status pesanan (pending, confirmed, completed)
+
+### 5. Lokasi Check-In Peta
+- **Peta Lokasi**: Melihat lokasi armada dan update lokasi armada
+- **Check-In**: Melakukan check-in lokasi armada
