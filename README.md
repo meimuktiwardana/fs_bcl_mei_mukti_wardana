@@ -1,61 +1,218 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Sistem Manajemen Pengiriman & Armada
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Aplikasi web untuk mengelola sistem pengiriman dan armada menggunakan Laravel. Sistem ini memungkinkan pengelolaan armada, pelacakan pengiriman, pemesanan kendaraan, dan monitoring lokasi real-time.
 
-## About Laravel
+## 📋 Fitur Utama
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- **Pelacakan Pengiriman**: Lacak status pengiriman dengan nomor tracking
+- **Manajemen Armada**: CRUD lengkap untuk data armada (Create, Read, Update, Delete)
+- **Pemesanan Armada**: Sistem pemesanan kendaraan dengan validasi ketersediaan
+- **Pencarian & Filter**: Cari pengiriman dan filter armada berdasarkan kriteria
+- **Lokasi Check-In**: Sistem check-in lokasi armada dengan peta
+- **Laporan**: Statistik pengiriman dengan query JOIN dan GROUP BY
+- **Dashboard**: Overview sistem dengan statistik real-time
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 🛠️ Tech Stack
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- **Backend**: Laravel 10.x
+- **Database**: MySQL / SQLite
+- **Frontend**: Bootstrap 5.1.3, Bootstrap Icons
+- **Maps**: Leaflet.js (untuk peta lokasi)
+- **Server**: PHP 8.1+
 
-## Learning Laravel
+## 📁 Struktur Proyek
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+```
+fs_bcl_[nama_lengkap]/
+├── app/
+│   ├── Console/
+│   │   └── Commands/
+│   │       └── SetupProject.php          # Command setup otomatis
+│   ├── Http/
+│   │   └── Controllers/
+│   │       ├── FleetController.php       # Controller armada
+│   │       ├── ShipmentController.php    # Controller pengiriman
+│   │       ├── OrderController.php       # Controller pemesanan
+│   │       └── LocationCheckInController.php # Controller lokasi
+│   └── Models/
+│       ├── Fleet.php                     # Model armada
+│       ├── Shipment.php                  # Model pengiriman
+│       ├── Order.php                     # Model pemesanan
+│       └── LocationCheckIn.php           # Model check-in lokasi
+├── database/
+│   ├── migrations/
+│   │   ├── create_fleets_table.php
+│   │   ├── create_shipments_table.php
+│   │   ├── create_orders_table.php
+│   │   └── create_location_check_ins_table.php
+│   └── seeders/
+│       └── DatabaseSeeder.php            # Data dummy
+├── resources/
+│   └── views/
+│       ├── layouts/
+│       │   └── app.blade.php            # Template utama
+│       ├── dashboard.blade.php          # Halaman dashboard
+│       ├── fleets/                      # Views armada
+│       ├── shipments/                   # Views pengiriman
+│       └── orders/                      # Views pemesanan
+└── routes/
+    └── web.php                          # Routing aplikasi
+```
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+## 🗄️ Struktur Database
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### Tabel `fleets` (Armada)
+| Kolom | Tipe | Keterangan |
+|-------|------|-----------|
+| id | BIGINT | Primary key |
+| fleet_number | VARCHAR(255) | Nomor armada (unique) |
+| vehicle_type | ENUM | Jenis kendaraan (truck, van, motorcycle, car) |
+| availability | ENUM | Status ketersediaan (available, unavailable) |
+| capacity | DECIMAL(8,2) | Kapasitas muatan (ton) |
+| created_at | TIMESTAMP | Waktu dibuat |
+| updated_at | TIMESTAMP | Waktu diperbarui |
 
-## Laravel Sponsors
+### Tabel `shipments` (Pengiriman)
+| Kolom | Tipe | Keterangan |
+|-------|------|-----------|
+| id | BIGINT | Primary key |
+| tracking_number | VARCHAR(255) | Nomor tracking (unique) |
+| shipping_date | DATE | Tanggal pengiriman |
+| origin_location | VARCHAR(255) | Lokasi asal |
+| destination_location | VARCHAR(255) | Lokasi tujuan |
+| status | ENUM | Status (pending, in_transit, delivered) |
+| item_details | TEXT | Detail barang |
+| fleet_id | BIGINT | Foreign key ke tabel fleets |
+| created_at | TIMESTAMP | Waktu dibuat |
+| updated_at | TIMESTAMP | Waktu diperbarui |
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### Tabel `orders` (Pemesanan)
+| Kolom | Tipe | Keterangan |
+|-------|------|-----------|
+| id | BIGINT | Primary key |
+| customer_name | VARCHAR(255) | Nama pelanggan |
+| customer_phone | VARCHAR(20) | Nomor telepon |
+| vehicle_type | ENUM | Jenis kendaraan yang dipesan |
+| order_date | DATE | Tanggal pemesanan |
+| item_details | TEXT | Detail barang |
+| fleet_id | BIGINT | Foreign key ke tabel fleets |
+| status | ENUM | Status (pending, confirmed, completed) |
+| created_at | TIMESTAMP | Waktu dibuat |
+| updated_at | TIMESTAMP | Waktu diperbarui |
 
-### Premium Partners
+### Tabel `location_check_ins` (Check-in Lokasi)
+| Kolom | Tipe | Keterangan |
+|-------|------|-----------|
+| id | BIGINT | Primary key |
+| fleet_id | BIGINT | Foreign key ke tabel fleets |
+| latitude | DECIMAL(10,8) | Koordinat lintang |
+| longitude | DECIMAL(11,8) | Koordinat bujur |
+| location_name | VARCHAR(255) | Nama lokasi |
+| checked_in_at | TIMESTAMP | Waktu check-in |
+| created_at | TIMESTAMP | Waktu dibuat |
+| updated_at | TIMESTAMP | Waktu diperbarui |
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+### Relasi Database
+- `fleets` → `shipments` (One to Many)
+- `fleets` → `orders` (One to Many)  
+- `fleets` → `location_check_ins` (One to Many)
 
-## Contributing
+## 🚀 Instalasi & Setup
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### Prerequisites
+- PHP >= 8.1
+- Composer
+- MySQL atau SQLite
+- Node.js (opsional untuk asset compilation)
 
-## Code of Conduct
+### Langkah Instalasi
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+1. **Clone Repository**
+   ```bash
+   git clone https://github.com/username/fs_bcl_[nama_lengkap].git
+   cd fs_bcl_[nama_lengkap]
+   ```
 
-## Security Vulnerabilities
+2. **Install Dependencies**
+   ```bash
+   composer install
+   ```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+3. **Setup Environment**
+   ```bash
+   cp .env.example .env
+   php artisan key:generate
+   ```
 
-## License
+4. **Konfigurasi Database**
+   
+   Edit file `.env`:
+   ```env
+   DB_CONNECTION=mysql
+   DB_HOST=127.0.0.1
+   DB_PORT=3306
+   DB_DATABASE=shipping_system
+   DB_USERNAME=root
+   DB_PASSWORD=
+   ```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+   **Atau gunakan SQLite:**
+   ```env
+   DB_CONNECTION=sqlite
+   # DB_HOST=127.0.0.1
+   # DB_PORT=3306
+   # DB_DATABASE=shipping_system
+   # DB_USERNAME=root
+   # DB_PASSWORD=
+   ```
+
+5. **Buat Database (MySQL)**
+   ```sql
+   CREATE DATABASE shipping_system;
+   ```
+
+   **Atau buat file SQLite:**
+   ```bash
+   touch database/database.sqlite
+   ```
+
+6. **Setup Database & Seeder**
+   ```bash
+   # Otomatis dengan command custom
+   php artisan setup:project --create-db
+   
+   # Atau manual
+   php artisan migrate
+   php artisan db:seed
+   ```
+
+7. **Jalankan Aplikasi**
+   ```bash
+   php artisan serve
+   ```
+   
+   Buka browser di `http://localhost:8000` atau `http://127.0.0.1:8000/`
+
+## 🎯 Cara Penggunaan
+
+### 1. Dashboard
+- Akses halaman utama untuk melihat statistik sistem
+- Monitor jumlah armada, pengiriman, dan pesanan
+- Akses cepat ke fitur utama
+
+### 2. Manajemen Armada
+- **Tambah Armada**: Menu Armada → Tambah Armada Baru
+- **Edit Armada**: Klik ikon pensil di daftar armada
+- **Hapus Armada**: Klik ikon sampah (hanya jika tidak sedang digunakan)
+- **Filter Armada**: Gunakan filter berdasarkan jenis dan ketersediaan
+
+### 3. Pelacakan Pengiriman
+- **Lacak**: Masukkan nomor tracking di halaman pelacakan
+- **Tambah Pengiriman**: Menu Pengiriman → Tambah Pengiriman
+- **Update Status**: Edit pengiriman untuk mengubah status
+- **Cari Pengiriman**: Gunakan pencarian berdasarkan tracking atau tujuan
+
+### 4. Pemesanan Armada
+- **Buat Pesanan**: Menu Pemesanan → Buat Pesanan Baru
+- **Pilih Jenis Kendaraan**: Sistem akan otomatis assign armada yang tersedia
+- **Monitor Status**: Lihat status pesanan (pending, confirmed, completed)
