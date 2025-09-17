@@ -14,7 +14,7 @@ Aplikasi web untuk mengelola sistem pengiriman dan armada menggunakan Laravel. S
 
 ## 🛠️ Tech Stack
 
-- **Backend**: Laravel 10.x
+- **Backend**: Laravel 12.x
 - **Database**: MySQL / SQLite
 - **Frontend**: Bootstrap 5.1.3, Bootstrap Icons
 - **Server**: PHP 8.1+
