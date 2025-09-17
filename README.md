@@ -22,7 +22,7 @@ Aplikasi web untuk mengelola sistem pengiriman dan armada menggunakan Laravel. S
 ## 📁 Struktur Proyek
 
 ```
-fs_bcl_[nama_lengkap]/
+fs_bcl_mei_mukti_wardana/
 ├── app/
 │   ├── Console/
 │   │   └── Commands/
@@ -128,8 +128,8 @@ fs_bcl_[nama_lengkap]/
 
 1. **Clone Repository**
    ```bash
-   git clone https://github.com/username/fs_bcl_[nama_lengkap].git
-   cd fs_bcl_[nama_lengkap]
+   git clone https://github.com/username/fs_bcl_mei_mukti_wardana.git
+   cd fs_bcl_mei_mukti_wardana
    ```
 
 2. **Install Dependencies**
