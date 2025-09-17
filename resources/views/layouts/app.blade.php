@@ -19,21 +19,50 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <div class="navbar-nav ms-auto">
-                    <a class="nav-link" href="{{ route('dashboard') }}">
+                    <a class="nav-link {{ Request::routeIs('dashboard') ? 'active' : '' }}" href="{{ route('dashboard') }}">
                         <i class="bi bi-house"></i> Dashboard
                     </a>
-                    <a class="nav-link" href="{{ route('shipments.track') }}">
+                    <a class="nav-link {{ Request::routeIs('shipments.track') ? 'active' : '' }}" href="{{ route('shipments.track') }}">
                         <i class="bi bi-search"></i> Lacak Pengiriman
                     </a>
-                    <a class="nav-link" href="{{ route('fleets.index') }}">
+                    <a class="nav-link {{ Request::routeIs('fleets.*') ? 'active' : '' }}" href="{{ route('fleets.index') }}">
                         <i class="bi bi-truck"></i> Armada
                     </a>
-                    <a class="nav-link" href="{{ route('shipments.index') }}">
+                    <a class="nav-link {{ Request::routeIs('shipments.*') && !Request::routeIs('shipments.track') ? 'active' : '' }}" href="{{ route('shipments.index') }}">
                         <i class="bi bi-box"></i> Pengiriman
                     </a>
-                    <a class="nav-link" href="{{ route('orders.index') }}">
+                    <a class="nav-link {{ Request::routeIs('orders.*') ? 'active' : '' }}" href="{{ route('orders.index') }}">
                         <i class="bi bi-cart"></i> Pemesanan
                     </a>
+                    
+                    <!-- Location Dropdown -->
+                    <div class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle {{ Request::routeIs('location.*') ? 'active' : '' }}" 
+                           href="#" id="locationDropdown" role="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-geo-alt"></i> Lokasi
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a class="dropdown-item {{ Request::routeIs('location.map') ? 'active' : '' }}" 
+                                   href="{{ route('location.map') }}">
+                                    <i class="bi bi-map"></i> Peta Lokasi
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item {{ Request::routeIs('location.checkin') ? 'active' : '' }}" 
+                                   href="{{ route('location.checkin') }}">
+                                    <i class="bi bi-geo-alt-fill"></i> Check-In
+                                </a>
+                            </li>
+                            <!-- <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <a class="dropdown-item {{ Request::routeIs('location.report') ? 'active' : '' }}" 
+                                   href="{{ route('location.report') }}">
+                                    <i class="bi bi-graph-up"></i> Laporan
+                                </a>
+                            </li> -->
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
@@ -46,14 +75,14 @@
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
         @endif
-        
+       
         @if(session('error'))
             <div class="alert alert-danger alert-dismissible fade show" role="alert">
                 <i class="bi bi-exclamation-circle"></i> {{ session('error') }}
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
         @endif
-        
+       
         @if($errors->any())
             <div class="alert alert-danger alert-dismissible fade show" role="alert">
                 <i class="bi bi-exclamation-triangle"></i> Terjadi kesalahan:
@@ -65,7 +94,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
         @endif
-
+        
         @yield('content')
     </div>
 
