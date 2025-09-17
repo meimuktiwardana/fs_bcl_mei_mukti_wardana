@@ -17,7 +17,6 @@ Aplikasi web untuk mengelola sistem pengiriman dan armada menggunakan Laravel. S
 - **Backend**: Laravel 10.x
 - **Database**: MySQL / SQLite
 - **Frontend**: Bootstrap 5.1.3, Bootstrap Icons
-- **Maps**: Leaflet.js (untuk peta lokasi)
 - **Server**: PHP 8.1+
 
 ## 📁 Struktur Proyek
